@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+<head>
+  <title>Tienda Electronics</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+  <script type="text/javascript">
+    var user = '{{request.user}}'
+    function getToken(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    var csrftoken = getToken('csrftoken')
+
+    function getCookie(name) {
+      // Split cookie string and get all individual name=value pairs in an array
+      var cookieArr = document.cookie.split(";");
+
+      // Loop through the array elements
+      for (var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+
+        /* Removing whitespace at the beginning of the cookie name
+        and compare it with the given string */
+        if (name == cookiePair[0].trim()) {
+          // Decode the cookie value and return
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+
+      // Return null if not found
+      return null;
+    }
+    var cart = JSON.parse(getCookie('cart'))
+    if (cart == undefined) {
+      cart = {}
+      console.log('se creo el cookie!', cart)
+      document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+    }
+
+    console.log('Cart:', cart)
+
+  </script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'Tienda' %}">
+      <img src="{% static 'images/logo.jpg' %}" alt="Logo" style="height: 80px; margin-right: 50px;">
+      Electronics
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <!-- Coloca el botón de inicio de sesión y el carrito a la izquierda -->
+      <div class="d-flex">
+        <div class="form-inline my-2 my-lg-0">
+          {% if user.is_authenticated %}
+          <span class="navbar-text text-white me-3">Bienvenido, {{ user.username }}</span>
+          <a href="{% url 'logout' %}" class="btn btn-danger">Cerrar Sesión</a>
+          {% else %}
+          <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a>
+          {% endif %}
+        </div>
+  
+        <div class="cart-container ms-2">
+          <div id="cart-total" class="text-center cart-number">{{ cartItems }}</div>
+          <a href="{% url 'Carrito' %}">
+            <img id="cart-icon" src="{% static 'images/carrito.png' %}" alt="Carrito de compras">
+          </a>
+        </div>
+      </div>
+  
+      <!-- Menú de categorías (a la derecha) -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link  fs-4" href="{% url 'productos_categoria' 'audio' %}">Audio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fs-4" href="{% url 'productos_categoria' 'cable' %}">Cable</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fs-4" href="{% url 'productos_categoria' 'seguridad' %}">Seguridad</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fs-4" href="{% url 'productos_categoria' 'lo_nuevo' %}">Lo nuevo</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Mensajes de Django -->
+  {% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <br />
+
+  <div class="container">
+    {% block content %}
+
+    {% endblock content %}
+
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginModalLabel">Inicio de Sesión</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="nav nav-tabs" id="loginTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login"
+                  type="button" role="tab" aria-controls="login" aria-selected="true">Iniciar Sesión</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <a href="{% url 'register' %}">Registrarse</a>
+              </li>
+            </ul>
+            <div class="tab-content mt-3" id="loginTabContent">
+              <!-- Iniciar Sesión -->
+              <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                <form method="POST" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                    <label for="username" class="form-label">Usuario</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                  <div class="facial-login">
+                    <a href="{% url 'password_reset' %}">¿Olvidó su contraseña?</a>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+ <!-- Pie de Página -->
+ <footer class="bg-dark text-white text-center py-4">
+  <div class="container">
+    <p><strong>Dirección:</strong> 5a Avenida 10-30, Zona 1, Ciudad de Guatemala</p>
+    <p><strong>Teléfono:</strong> +502 2423-4567</p>
+    <p><strong>Horario de Atención:</strong> Lunes a Viernes de 9:00 AM a 6:00 PM</p>
+  </div>
+  <p>&copy; 2024 Electronics. Todos los derechos reservados.</p>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+</body>
+
+</html>

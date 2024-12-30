@@ -1,0 +1,21 @@
+{% extends 'generales/main.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2 class="my-4">Productos de {{ request.path|slice:":-1" }}</h2>
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <img src="{{ product.imageURL }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">$ {{ product.price }}</p>
+                            <button class="btn btn-primary add-to-cart" data-product-id="{{ product.id }}">Agregar al carrito</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

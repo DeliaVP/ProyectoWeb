@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8000"  # Cambiado a 8080
+
+  db:
+    image: postgres
+    ports:
+      - "5433:5432"  # Cambiado a 5433
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: delia
+      POSTGRES_DB: tienda_electronics
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: delia
+    ports:
+      - "8081:80"  # Cambiado a 8081
+    depends_on:
+      - db

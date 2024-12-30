@@ -1,0 +1,130 @@
+body {
+    background-color: hsl(207, 60%, 93%); /* Un fondo más claro */
+}
+
+h1,h2,h3,h4,h5,h6 {
+    color: hsl(0, 0%, 20%); /* Oscuro pero no tan opaco */
+    font-family: 'Arial', sans-serif; /* Fuente más moderna */
+}
+
+.box-element {
+    box-shadow: hsl(0, 0%, 80%) 0 4px 16px; /* Sombra más suave */
+    background-color: #f9f9f9; /* Fondo más suave */
+    border-radius: 8px; /* Bordes más redondeados */
+    padding: 15px; /* Más espacio */
+}
+
+.thumbnail {
+    width: 100%;
+    height: 250px; /* Ajustado para mayor visibilidad */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(214,214,214,0.8); /* Sombra más difusa */
+    object-fit: cover; /* Para mantener la relación de aspecto */
+}
+
+.product {
+    border-radius: 0 0 8px 8px; /* Bordes inferiores redondeados */
+}
+
+.cart-container {
+    display: inline-block;
+    position: relative;
+}
+
+.cart-number {
+    position: absolute;
+    top: -12px;  /* Ajuste de la posición */
+    right: -8px; /* Ajuste de la posición */
+    background: #ff4747; /* Fondo rojo más brillante */
+    color: white; /* Texto blanco */
+    padding: 5px 10px; /* Mayor espacio */
+    border-radius: 50%; /* Redondeado */
+    font-weight: bold;
+    font-size: 16px; /* Mejor visibilidad del número */
+}
+
+.bg-dark {
+    background-color: #2a4d56 !important; /* Color más oscuro y elegante */
+}
+
+#cart-icon {
+    width: 30px; /* Icono más grande */
+    display: inline-block;
+    margin-left: 20px;
+}
+
+#cart-total {
+    display: block;
+    text-align: center;
+    color: #fff;
+    background-color: #ff4747; /* Fondo rojo brillante */
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 16px; /* Texto más grande */
+}
+
+.col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12 {
+    margin-top: 15px; /* Más espacio entre columnas */
+}
+
+.btn {
+    border-radius: 50px; /* Botones más redondeados */
+    padding: 10px 20px; /* Más espacio interior */
+    font-size: 16px; /* Mejor tamaño de texto */
+    transition: all 0.2s ease; /* Suavizar transición */
+}
+
+.btn:hover {
+    background-color: hsl(207, 60%, 70%); /* Cambio de color al pasar el mouse */
+    transform: scale(1.05); /* Efecto de "amplificación" al pasar el mouse */
+}
+
+.row-image {
+    width: 120px; /* Imagen más grande */
+}
+
+.form-field {
+    width: 100%; /* Para ocupar todo el espacio disponible */
+    max-width: 300px; /* Maxima anchura */
+    display: inline-block;
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px; /* Bordes redondeados */
+    border: 1px solid #ddd; /* Bordes sutiles */
+    box-sizing: border-box;
+}
+
+.cart-row {
+    display: flex;
+    align-items: center;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ececec;
+}
+
+.quantity {
+    display: inline-block;
+    font-weight: 700;
+    padding-right: 12px;
+}
+
+.chg-quantity {
+    width: 18px; /* Botones de cantidad más grandes */
+    cursor: pointer;
+    display: block;
+    margin-top: 5px;
+    transition: 0.2s;
+    background-color: #f2f2f2;
+    border-radius: 50%;
+    text-align: center;
+}
+
+.chg-quantity:hover {
+    opacity: 0.7; /* Más suave */
+    background-color: #ddd; /* Cambio de color al pasar el mouse */
+}
+
+.hidden {
+    display: none !important;
+}
